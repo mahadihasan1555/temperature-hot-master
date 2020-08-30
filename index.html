@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="search-box" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                <button id="search-btn" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="icon" src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
+            <h1 id="cityName">Dhaka</h1>
+            <h3><span id="temperature-value">30</span> &deg;C</h3>
+            <h1 class="lead" id="condition">Clouds</h1>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        //Create api object
+        const api ={ 
+            key: "e7ef898afe17f42ffe01ead0898f3a4b",
+            base: "https://api.openweathermap.org/data/2.5/"
+        }
+
+        //function for Button Click
+        const clickBtn = document.getElementById('search-btn');
+        clickBtn.addEventListener('click',searchBox);
+
+        //function for search Box
+        function searchBox(){
+            const searchValue = document.getElementById('search-box').value;
+            getResults(searchValue)       
+        }
+
+        //weather result get function
+        function getResults(query) {
+            fetch(`${api.base}weather?q=${query}&appid=${api.key}&units=metric`)
+            .then(weather => {
+                return weather.json();
+            }).then(displayResults);
+        }
+
+        //Weather display Result in monitor
+        function displayResults(weather){ 
+            let city = document.getElementById('cityName');
+            city.innerText =`${weather.name}, ${weather.sys.country}`;
+
+            let temp = document.getElementById('temperature-value');
+            temp.innerText =`${Math.round(weather.main.temp)}`;
+
+            let weatherCondition = document.getElementById('condition');
+            weatherCondition.innerText = weather.weather[0].main;
+        }
+
+    </script>
+</body>
+
+</html>
